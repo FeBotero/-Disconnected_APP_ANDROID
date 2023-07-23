@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Reactivate">
+    <TextView
+        android:id="@+id/activate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text="Ativação"
+        android:textSize="50dp"
+        android:layout_marginTop="10dp"
+        />
+
+    <TextView
+        android:id="@+id/user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/activate"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text="Usuário : "
+        android:textSize="20sp"
+        android:layout_marginTop="30dp"/>
+    <TextView
+        android:id="@+id/statusActive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/user"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text="Status : Ativo"
+        android:textColor="#008000"
+        android:layout_marginTop="15dp"/>
+
+<!--        vermelho:#808080-->
+
+    <EditText
+        android:id="@+id/senha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:width="300dp"
+        android:hint="Senha"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        android:textColor="#000000"
+        android:textColorHint="#757575"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activate"/>
+
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonActive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ativar"
+        android:width="300dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/senha"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/buttonActive"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:width="300dp"
+        android:textSize="20dp"
+        android:layout_marginTop="15dp"
+        android:textAlignment="center"
+        android:text="Em caso de desativação, favor entrar em contato com administração e solicitar código de ativação."
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
