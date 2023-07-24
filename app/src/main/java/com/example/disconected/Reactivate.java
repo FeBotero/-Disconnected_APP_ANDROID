@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -26,10 +28,16 @@ public class Reactivate extends AppCompatActivity {
         status = findViewById(R.id.statusActive);
         user = findViewById(R.id.user);
 
+        HandleProps handleProps = new HandleProps();
 
         buttonActivate.setOnClickListener(view->{
             Intent intent = new Intent("wifi.action.shutdown_wifi");
             sendBroadcast(intent);
+            Handler handler = new Handler();
+            handler.postDelayed(() -> {
+                handleProps.write("persist.control.wifi.service", Boolean.toString(true));
+                Log.d("Wifi", "Desabilitando Função Wifi");
+            }, 5000); // 5000 milissegundos = 5 segundos
         });
 
         DatabaseHelper dbHelper = new DatabaseHelper(this);
