@@ -2,6 +2,7 @@ package com.example.disconected;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -25,6 +26,11 @@ public class Reactivate extends AppCompatActivity {
         status = findViewById(R.id.statusActive);
         user = findViewById(R.id.user);
 
+
+        buttonActivate.setOnClickListener(view->{
+            Intent intent = new Intent("wifi.action.shutdown_wifi");
+            sendBroadcast(intent);
+        });
 
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -73,4 +79,8 @@ public class Reactivate extends AppCompatActivity {
 
         db.close(); // Não esqueça de fechar o banco de dados após o uso
     }
+
+
+
+
 }
