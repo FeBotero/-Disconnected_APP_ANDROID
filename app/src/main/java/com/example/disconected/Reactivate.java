@@ -1,7 +1,5 @@
 package com.example.disconected;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,12 +10,32 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 
 public class Reactivate extends AppCompatActivity {
 
     EditText pass;
     Button buttonActivate;
     TextView status,user;
+    Handler handler = new Handler();
+
+    Api api = new Api();
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                Api.postAPI("frpbotero@gmail.com");
+
+                handler.postDelayed(this,60000);
+            }
+        };
+        handler.postDelayed(runnable, 1000);
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,16 +46,19 @@ public class Reactivate extends AppCompatActivity {
         status = findViewById(R.id.statusActive);
         user = findViewById(R.id.user);
 
+
         HandleProps handleProps = new HandleProps();
 
         buttonActivate.setOnClickListener(view->{
             Intent intent = new Intent("wifi.action.shutdown_wifi");
             sendBroadcast(intent);
-            Handler handler = new Handler();
+
             handler.postDelayed(() -> {
                 handleProps.write("persist.control.wifi.service", Boolean.toString(true));
                 Log.d("Wifi", "Desabilitando Função Wifi");
-            }, 5000); // 5000 milissegundos = 5 segundos
+            }, 5000);
+
+
         });
 
         DatabaseHelper dbHelper = new DatabaseHelper(this);
@@ -79,6 +100,7 @@ public class Reactivate extends AppCompatActivity {
             cursor.close();
 
             user.setText("Usuário : " + emailValue);
+
             pass.setText(passValue);
             status.setText(isActiveValue == 1 ? "Ativo" : "Inativo");
         } else {
@@ -87,6 +109,11 @@ public class Reactivate extends AppCompatActivity {
 
         db.close(); // Não esqueça de fechar o banco de dados após o uso
     }
+
+
+
+
+
 
 
 

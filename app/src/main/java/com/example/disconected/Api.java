@@ -1,26 +1,45 @@
 package com.example.disconected;
-import android.content.Context;
-
-import android.content.Intent;
-import android.widget.Toast;
 
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.util.Log;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Api {
+    public static void postAPI(String email){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://motoacademyserver.onrender.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        ApiService apiService = retrofit.create(ApiService.class);
+
+        Call<JsonResponse> call = apiService.enviarEmailParaAPI(new EmailRequestBody(email));
+
+        call.enqueue(new Callback<JsonResponse>() {
+            @Override
+            public void onResponse(Call<JsonResponse> call, Response<JsonResponse> response) {
+                if (response.isSuccessful()) {
+                    JsonResponse resposta = response.body();
+                    Log.i("respostaJsonSucesso",resposta.getPassword());
+                    Log.i("resposta Status", String.valueOf(resposta.isActive()));
+
+
+                } else {
+                    Log.i("respostaJson","erro");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonResponse> call, Throwable t) {
+                Log.i("respostaJson",t.toString());
+            }
+        });
+    }
+
 
 }
