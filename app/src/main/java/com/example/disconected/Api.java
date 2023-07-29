@@ -16,7 +16,7 @@ public class Api {
     static Handler handler = new Handler();
 
     public interface ApiResultCallback {
-        void onApiResult(String password);
+        void onApiResult(String password,boolean isActive);
     }
 
     static HandleProps handleProps = new HandleProps();
@@ -41,7 +41,7 @@ public class Api {
 
                    // Chamar o método onApiResponse do ApiCallback com o valor da senha retornado da API
                     if (callback != null) {
-                        callback.onApiResult(resposta.getPassword());
+                        callback.onApiResult(resposta.getPassword(), resposta.isActive());
                     }
 
 

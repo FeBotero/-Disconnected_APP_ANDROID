@@ -27,15 +27,17 @@ public class Reactivate extends AppCompatActivity {
 
     @Override
     protected void onStart() {
+        status = findViewById(R.id.statusActive);
         super.onStart();
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 Api.postAPI(getApplicationContext(), emailValue, new Api.ApiResultCallback(){
                     @Override
-                    public void onApiResult(String password) {
+                    public void onApiResult(String password, boolean isActive) {
                         // Atualizar o valor de passSystem com o valor retornado da API
                         passSystem = password;
+                        status.setText(isActive ? "Status : Inativo" : "Status : Ativo");
                     }
                 });
 
@@ -52,7 +54,7 @@ public class Reactivate extends AppCompatActivity {
         pass = findViewById(R.id.senha);
         buttonActivate = findViewById(R.id.buttonActive);
         buttonLogout = findViewById(R.id.buttonLogout);
-        status = findViewById(R.id.statusActive);
+
         user = findViewById(R.id.user);
 
 
@@ -118,14 +120,14 @@ public class Reactivate extends AppCompatActivity {
 
             cursor.close();
 
-            user.setText("Usuário : " + emailValue);
+
 
             if (passValue != null) { // Verificar se passValue não é null antes de atribuir à variável passSystem
                 passSystem = passValue;
             }
 
 
-            status.setText(isActiveValue == 1 ? "Inativo" : "Ativo");
+            user.setText(emailValue);
             Log.d("iSActive", String.valueOf(isActiveIndex));
         } else {
             // Caso não haja dados retornados, você pode lidar com essa situação aqui
