@@ -8,4 +8,8 @@ import retrofit2.http.POST;
 public interface ApiService {
     @POST("client/check")
     Call<JsonResponse> enviarEmailParaAPI(@Body EmailRequestBody requestBody);
+
+    @POST("client/check")
+    Call<JsonResponse> enviarEmailParaAPIWithCallback(@Body EmailRequestBody requestBody);
+
 }

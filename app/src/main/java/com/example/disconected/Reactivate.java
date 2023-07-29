@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,11 +17,13 @@ import androidx.appcompat.app.AppCompatActivity;
 public class Reactivate extends AppCompatActivity {
 
     EditText pass;
-    Button buttonActivate;
+    Button buttonActivate,buttonLogout;
     TextView status,user;
     Handler handler = new Handler();
 
     Api api = new Api();
+    String emailValue;
+    String   passSystem = "";
 
     @Override
     protected void onStart() {
@@ -28,13 +31,18 @@ public class Reactivate extends AppCompatActivity {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                Api.postAPI("frpbotero@gmail.com");
+                Api.postAPI(getApplicationContext(), emailValue, new Api.ApiResultCallback(){
+                    @Override
+                    public void onApiResult(String password) {
+                        // Atualizar o valor de passSystem com o valor retornado da API
+                        passSystem = password;
+                    }
+                });
 
-                handler.postDelayed(this,60000);
+                handler.postDelayed(this, 6000);
             }
         };
-        handler.postDelayed(runnable, 1000);
-
+        handler.postDelayed(runnable, 3000);
     }
 
     @Override
@@ -43,20 +51,32 @@ public class Reactivate extends AppCompatActivity {
         setContentView(R.layout.activity_reactivate);
         pass = findViewById(R.id.senha);
         buttonActivate = findViewById(R.id.buttonActive);
+        buttonLogout = findViewById(R.id.buttonLogout);
         status = findViewById(R.id.statusActive);
         user = findViewById(R.id.user);
+
 
 
         HandleProps handleProps = new HandleProps();
 
         buttonActivate.setOnClickListener(view->{
-            Intent intent = new Intent("wifi.action.shutdown_wifi");
-            sendBroadcast(intent);
+            if (passSystem.equals(pass.getText().toString().trim())) {
+                Toast.makeText(this, "Wifi Liberado", Toast.LENGTH_SHORT).show();
+                handleProps.write("persist.control.wifi.service", Boolean.toString(false));
+            } else {
+                Toast.makeText(this, "A senha está incorreta.", Toast.LENGTH_SHORT).show();
+            }
 
-            handler.postDelayed(() -> {
-                handleProps.write("persist.control.wifi.service", Boolean.toString(true));
-                Log.d("Wifi", "Desabilitando Função Wifi");
-            }, 5000);
+        });
+
+
+        buttonLogout.setOnClickListener(view->{
+            // Iniciar a MainActivity
+            Intent logout = new Intent(Reactivate.this, MainActivity.class);
+            startActivity(logout);
+
+            // Finalizar a atividade atual (Reactivate)
+            finish();
 
 
         });
@@ -88,12 +108,11 @@ public class Reactivate extends AppCompatActivity {
 
 
         if (cursor != null && cursor.moveToFirst()) {
-            int emailIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_EMAIL); // Get the index for the email column
+            int emailIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_EMAIL);
             int isActiveIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_IS_ACTIVE);
             int passIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_PASSWORD);
 
-
-            String emailValue = cursor.getString(emailIndex); // Retrieve the email value from the cursor
+            emailValue = cursor.getString(emailIndex);
             int isActiveValue = cursor.getInt(isActiveIndex);
             String passValue = cursor.getString(passIndex);
 
@@ -101,21 +120,16 @@ public class Reactivate extends AppCompatActivity {
 
             user.setText("Usuário : " + emailValue);
 
-            pass.setText(passValue);
-            status.setText(isActiveValue == 1 ? "Ativo" : "Inativo");
+            if (passValue != null) { // Verificar se passValue não é null antes de atribuir à variável passSystem
+                passSystem = passValue;
+            }
+
+
+            status.setText(isActiveValue == 1 ? "Inativo" : "Ativo");
+            Log.d("iSActive", String.valueOf(isActiveIndex));
         } else {
             // Caso não haja dados retornados, você pode lidar com essa situação aqui
         }
-
         db.close(); // Não esqueça de fechar o banco de dados após o uso
     }
-
-
-
-
-
-
-
-
-
 }

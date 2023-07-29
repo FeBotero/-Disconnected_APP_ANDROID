@@ -1,10 +1,6 @@
 package com.example.disconected;
 
-import androidx.appcompat.app.AppCompatActivity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -13,6 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 
 public class MainActivity extends AppCompatActivity{
@@ -48,15 +46,14 @@ public class MainActivity extends AppCompatActivity{
 
         // Verificar se há dados retornados da consulta
         if (cursor != null && cursor.moveToFirst()) {
-            // Email cadastrado encontrado no banco de dados
-            cursor.close(); // Fechar o cursor antes de redirecionar
+            cursor.close();
 
             Intent intent = new Intent(getApplicationContext(), Reactivate.class);
             startActivity(intent);
-            finish(); // Finalizar a MainActivity para que o usuário não possa voltar a ela pressionando o botão "Back"
+            finish();
         }
 
-        db.close(); // Não esqueça de fechar o banco de dados após o uso
+        db.close();
     }
 
     @Override
