@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +20,10 @@ public class MainActivity extends AppCompatActivity{
     Button buttonSubmit;
     ProgressBar progressBar;
     private DatabaseHelper databaseHelper;
+
+    String user,emailValue = "";
+
+    Handler handler = new Handler();
 
     @Override
     protected void onStart() {
@@ -46,11 +51,17 @@ public class MainActivity extends AppCompatActivity{
 
         // Verificar se há dados retornados da consulta
         if (cursor != null && cursor.moveToFirst()) {
+            int emailIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_EMAIL);
+            emailValue = cursor.getString(emailIndex);
+
             cursor.close();
 
-            Intent intent = new Intent(getApplicationContext(), Reactivate.class);
-            startActivity(intent);
-            finish();
+
+            user = emailValue;
+
+//            Intent intent = new Intent(getApplicationContext(), Reactivate.class);
+//            startActivity(intent);
+//            finish();
         }
 
         db.close();
@@ -72,13 +83,22 @@ public class MainActivity extends AppCompatActivity{
             if (!emailContent.isEmpty()) {
                 boolean success = databaseHelper.saveEmailToDatabase(emailContent);
 
+
+
                 if (success) {
                     progressBar.setVisibility(View.VISIBLE);
                     buttonSubmit.setVisibility(View.GONE);
+                    new Handler().postDelayed(new Runnable() {
 
-                    Intent intent = new Intent(getApplicationContext(), Reactivate.class);
-                    startActivity(intent);
-                    finish();
+                        @Override
+                        public void run() {
+                            progressBar.setVisibility(View.GONE);
+
+                            Intent intent = new Intent(getApplicationContext(), Reactivate.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }, 1000);
                 } else {
                     Toast.makeText(this, "Favor digitar novamente", Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);

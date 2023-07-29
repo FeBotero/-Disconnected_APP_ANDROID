@@ -61,7 +61,7 @@ public class Api {
                     }
 
                 } else {
-                    Log.i("respostaJson","Errona conexão!");
+                    Log.i("respostaJson","Erro na conexão!");
 
                 }
             }

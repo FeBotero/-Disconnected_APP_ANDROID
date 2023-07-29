@@ -58,4 +58,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return false;
         }
     }
+    public void deleteAllDataFromDatabase() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_API_DATA, null, null);
+        db.close();
+    }
 }

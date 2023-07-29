@@ -22,7 +22,8 @@ public class Reactivate extends AppCompatActivity {
     Handler handler = new Handler();
 
     Api api = new Api();
-    String emailValue;
+
+    String emailValue ="";
     String   passSystem = "";
 
     @Override
@@ -45,6 +46,7 @@ public class Reactivate extends AppCompatActivity {
             }
         };
         handler.postDelayed(runnable, 3000);
+
     }
 
     @Override
@@ -73,6 +75,9 @@ public class Reactivate extends AppCompatActivity {
 
 
         buttonLogout.setOnClickListener(view->{
+            // Excluir todos os dados do banco de dados antes de ir para a MainActivity
+            DatabaseHelper dbHelper = new DatabaseHelper(Reactivate.this);
+            dbHelper.deleteAllDataFromDatabase();
             // Iniciar a MainActivity
             Intent logout = new Intent(Reactivate.this, MainActivity.class);
             startActivity(logout);
@@ -128,7 +133,8 @@ public class Reactivate extends AppCompatActivity {
 
 
             user.setText(emailValue);
-            Log.d("iSActive", String.valueOf(isActiveIndex));
+            Log.d("email", emailValue);
+            Log.d("iSActive", String.valueOf(isActiveValue));
         } else {
             // Caso não haja dados retornados, você pode lidar com essa situação aqui
         }
