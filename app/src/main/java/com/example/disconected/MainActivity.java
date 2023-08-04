@@ -59,9 +59,9 @@ public class MainActivity extends AppCompatActivity{
 
             user = emailValue;
 
-//            Intent intent = new Intent(getApplicationContext(), Reactivate.class);
-//            startActivity(intent);
-//            finish();
+            Intent intent = new Intent(getApplicationContext(), Reactivate.class);
+            startActivity(intent);
+            finish();
         }
 
         db.close();

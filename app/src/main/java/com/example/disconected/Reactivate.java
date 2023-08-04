@@ -1,6 +1,5 @@
 package com.example.disconected;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -55,7 +54,7 @@ public class Reactivate extends AppCompatActivity {
         setContentView(R.layout.activity_reactivate);
         pass = findViewById(R.id.senha);
         buttonActivate = findViewById(R.id.buttonActive);
-        buttonLogout = findViewById(R.id.buttonLogout);
+//        buttonLogout = findViewById(R.id.buttonLogout);
 
         user = findViewById(R.id.user);
 
@@ -67,6 +66,7 @@ public class Reactivate extends AppCompatActivity {
             if (passSystem.equals(pass.getText().toString().trim())) {
                 Toast.makeText(this, "Wifi Liberado", Toast.LENGTH_SHORT).show();
                 handleProps.write("persist.control.wifi.service", Boolean.toString(false));
+                pass.setText("");
             } else {
                 Toast.makeText(this, "A senha está incorreta.", Toast.LENGTH_SHORT).show();
             }
@@ -74,19 +74,19 @@ public class Reactivate extends AppCompatActivity {
         });
 
 
-        buttonLogout.setOnClickListener(view->{
-            // Excluir todos os dados do banco de dados antes de ir para a MainActivity
-            DatabaseHelper dbHelper = new DatabaseHelper(Reactivate.this);
-            dbHelper.deleteAllDataFromDatabase();
-            // Iniciar a MainActivity
-            Intent logout = new Intent(Reactivate.this, MainActivity.class);
-            startActivity(logout);
-
-            // Finalizar a atividade atual (Reactivate)
-            finish();
-
-
-        });
+//        buttonLogout.setOnClickListener(view->{
+//            // Excluir todos os dados do banco de dados antes de ir para a MainActivity
+//            DatabaseHelper dbHelper = new DatabaseHelper(Reactivate.this);
+//            dbHelper.deleteAllDataFromDatabase();
+//            // Iniciar a MainActivity
+//            Intent logout = new Intent(Reactivate.this, MainActivity.class);
+//            startActivity(logout);
+//
+//            // Finalizar a atividade atual (Reactivate)
+//            finish();
+//
+//
+//        });
 
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
